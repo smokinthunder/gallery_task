@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gal2/providers/selection_provider.dart';
 import 'package:gal2/services/media_service.dart';
 import 'package:gal2/utils/date_formatter.dart';
 import 'package:gal2/models/grouped_assets.dart';
+import 'package:gal2/widgets/bottom_drawer.dart';
 import 'package:gal2/widgets/custom_app_bar.dart';
 import 'package:gal2/widgets/grouped_list.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,13 +47,17 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
     setState(() {
-      groupedAssets = sortedEntries.map((e) => GroupedAssets(e.key, e.value)).toList();
+      groupedAssets = sortedEntries
+          .map((e) => GroupedAssets(e.key, e.value))
+          .toList();
       isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final selectionProvider = Provider.of<SelectionProvider>(context);
+    final hasSelection = selectionProvider.hasSelection;
     if (isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -60,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: groupedAssets.isEmpty
           ? const Center(child: Text("No images found"))
           : GroupedListSection(groups: groupedAssets),
+      bottomSheet: hasSelection ? BottomDrawer() : null,
     );
   }
 }
