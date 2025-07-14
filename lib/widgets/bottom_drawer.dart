@@ -173,9 +173,20 @@ class _BottomDrawerState extends State<BottomDrawer> {
           right: 0,
           child: Center(
             child: InkWell(
-              onTap: () => setState(() {
-                isShare = !isShare;
+              onLongPress: () => setState(() {
+                isShare = true;
               }),
+              onTap: () {
+                if (isShare) {
+                  setState(() {
+                    isShare = false;
+                  });
+                } else {
+                  // Handle the send action here
+                }
+              },
+              
+
               child: Container(
                 decoration: BoxDecoration(
                   color: isShare? Colors.transparent: Colors.white,

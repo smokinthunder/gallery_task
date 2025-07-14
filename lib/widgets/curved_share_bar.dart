@@ -5,7 +5,7 @@ class CurvedShareBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 120,
       child: Stack(
