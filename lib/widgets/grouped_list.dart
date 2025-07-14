@@ -29,8 +29,6 @@ class GroupedListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectionProvider = Provider.of<SelectionProvider>(context);
-    final hasSelection = selectionProvider.hasSelection;
     return ListView.separated(
       itemCount: groups.length,
       separatorBuilder: (_, __) => Container(),
@@ -43,7 +41,7 @@ class GroupedListSection extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(
                 group.header,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.blueGrey,
@@ -52,22 +50,36 @@ class GroupedListSection extends StatelessWidget {
             ),
             GridView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 4,
                 mainAxisSpacing: 4,
               ),
               itemCount: group.assets.length,
               itemBuilder: (context, idx) {
-                return InkWell(
-                  onTap: () => hasSelection
-                      ? imageSelect(group, context, idx)
-                      : imageOpen(group, context, idx),
-                  onLongPress: () => hasSelection
-                      ? imageOpen(group, context, idx)
-                      : imageSelect(group, context, idx),
-                  child: AssetThumbnail(asset: group.assets[idx]),
+                // Extract hasSelection here without affecting the whole list
+                return Consumer<SelectionProvider>(
+                  builder: (context, selectionProvider, _) {
+                    final hasSelection = selectionProvider.hasSelection;
+                    return InkWell(
+                      onTap: () {
+                        if (hasSelection) {
+                          imageSelect(group, context, idx);
+                        } else {
+                          imageOpen(group, context, idx);
+                        }
+                      },
+                      onLongPress: () {
+                        if (hasSelection) {
+                          imageOpen(group, context, idx);
+                        } else {
+                          imageSelect(group, context, idx);
+                        }
+                      },
+                      child: AssetThumbnail(asset: group.assets[idx]),
+                    );
+                  },
                 );
               },
             ),

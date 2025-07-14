@@ -13,7 +13,8 @@ class AssetThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final selectionProvider = Provider.of<SelectionProvider>(context);
+    final isSelected = selectionProvider.selectedAssets.contains(asset);
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -21,7 +22,14 @@ class AssetThumbnail extends StatelessWidget {
           future: asset.thumbnailData,
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
-              return Image.memory(snapshot.data!, fit: BoxFit.cover);
+              return Image.memory(
+                colorBlendMode: BlendMode.darken,
+                color: isSelected
+                    ? Colors.black.withAlpha(100)
+                    : Colors.transparent,
+                snapshot.data!,
+                fit: BoxFit.cover,
+              );
             } else {
               return Shimmer.fromColors(
                 baseColor: Colors.grey[300]!,
@@ -35,27 +43,19 @@ class AssetThumbnail extends StatelessWidget {
             }
           },
         ),
-          Selector<SelectionProvider, bool>(
-          selector: (context, provider) =>
-              provider.selectedAssets.contains(asset),
-          shouldRebuild: (prev, next) => prev != next,
-          builder: (context, isSelected, _) {
-            if (!isSelected) return const SizedBox.shrink();
-
-            return Positioned(
-              top: 4,
-              right: 4,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withAlpha(204),
-                ),
-                child: Icon(Icons.check_circle, color: Colors.blue, size: 24),
+        if (isSelected)
+          Positioned(
+            top: 4,
+            right: 4,
+            child: Container(
+              decoration: BoxDecoration(shape: BoxShape.circle),
+              child: Icon(
+                Icons.check_circle_rounded,
+                color: Colors.white,
+                size: 24,
               ),
-            );
-          },
-        )
+            ),
+          ),
       ],
     );
   }

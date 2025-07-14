@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gal2/providers/selection_provider.dart';
+import 'package:gal2/widgets/curved_row_clipper.dart';
+import 'package:gal2/widgets/curved_share_bar.dart';
 import 'package:provider/provider.dart';
 
 class BottomDrawer extends StatefulWidget {
@@ -176,7 +178,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
               }),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isShare? Colors.transparent: Colors.white,
                   borderRadius: BorderRadius.circular(52),
                 ),
                 padding: const EdgeInsets.all(10),
@@ -205,28 +207,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
           child: Center(
             child: (!isShare)
                 ? null
-                : Container(
-                    height: 40,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                        4,
-                        (index) => Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.blueAccent,
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                : CurvedShareBar(),
           ),
         ),
       ],
