@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gal2/providers/selection_provider.dart';
-import 'package:gal2/widgets/curved_row_clipper.dart';
 import 'package:gal2/widgets/curved_share_bar.dart';
 import 'package:provider/provider.dart';
 

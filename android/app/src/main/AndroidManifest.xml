@@ -6,7 +6,7 @@
 
 
     <application
-        android:label="gal2"
+        android:label="ente Gallery"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
